@@ -20,11 +20,30 @@ func TestMain(m *testing.M) {
 	os.Exit(0)
 }
 
-var cnt int
-var blob []byte
-var statusCode int
+func testInmemory(m *testing.M) {
+	fmt.Println("With in-memory counter")
+	err := createInMemory()
+	if err != nil {
+		os.Exit(1)
+	}
+	code := m.Run()
+	if code != 0 {
+		os.Exit(code)
+	}
+}
 
-var srv *httpapp.HTTPServer
+func testRedis(m *testing.M) {
+	fmt.Println("With redis counter")
+	teardown, err := createRedis()
+	if err != nil {
+		os.Exit(1)
+	}
+	code := m.Run()
+	teardown()
+	if code != 0 {
+		os.Exit(code)
+	}
+}
 
 func createInMemory() error {
 	ctx := context.Background()
@@ -63,27 +82,8 @@ func createRedis() (func(), error) {
 	}, nil
 }
 
-func testInmemory(m *testing.M) {
-	fmt.Println("With in-memory counter")
-	err := createInMemory()
-	if err != nil {
-		os.Exit(1)
-	}
-	code := m.Run()
-	if code != 0 {
-		os.Exit(code)
-	}
-}
+var cnt int
+var blob []byte
+var statusCode int
 
-func testRedis(m *testing.M) {
-	fmt.Println("With redis counter")
-	teardown, err := createRedis()
-	if err != nil {
-		os.Exit(1)
-	}
-	code := m.Run()
-	teardown()
-	if code != 0 {
-		os.Exit(code)
-	}
-}
+var srv *httpapp.HTTPServer
