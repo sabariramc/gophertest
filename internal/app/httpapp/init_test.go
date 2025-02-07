@@ -2,6 +2,7 @@ package httpapp_test
 
 import (
 	"context"
+	"fmt"
 	"gopertest/internal/app/httpapp"
 	"gopertest/internal/component"
 	inmCtr "gopertest/internal/counter/inmemory"
@@ -57,6 +58,7 @@ func createRedis() (func(), error) {
 }
 
 func testInmemory(m *testing.M) {
+	fmt.Println("With in-memory counter")
 	err := createInMemory()
 	if err != nil {
 		os.Exit(1)
@@ -68,6 +70,7 @@ func testInmemory(m *testing.M) {
 }
 
 func testRedis(m *testing.M) {
+	fmt.Println("With redis counter")
 	teardown, err := createRedis()
 	if err != nil {
 		os.Exit(1)
