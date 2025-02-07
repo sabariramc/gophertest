@@ -14,67 +14,69 @@ var tc = []struct {
 	name     string
 	err      *errors.HTTPError
 	expected string
-}{{
-	name:     "BadRequest",
-	err:      errors.ErrBadRequest,
-	expected: `{"Code":"BAD_REQUEST","Message":"Invalid input"}`,
-}, {
-	name:     "NotFound",
-	err:      errors.ErrNotFound,
-	expected: `{"Code":"NOT_FOUND","Message":"URL Not Found"}`,
-}, {
-	name:     "MethodNotAllowed",
-	err:      errors.ErrMethodNotAllowed,
-	expected: `{"Code":"METHOD_NOT_ALLOWED","Message":"Method Not Allowed"}`,
-}, {
-	name:     "InternalServerError",
-	err:      errors.ErrInternalServerError,
-	expected: `{"Code":"INTERNAL_SERVER_ERROR","Message":"Internal Server Error","Description":"Retry after some time, if persist contact technical team"}`,
-}, {
-	name:     "CustomError",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: "xyz"}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":"xyz"}`,
-}, {
-	name:     "CustomErrorWithMap",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: map[string]string{"key": "value"}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"key":"value"}}`,
-}, {
-	name:     "CustomErrorWithArray",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: []any{"a", 1}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":["a",1]}`,
-}, {
-	name:     "CustomErrorWithStruct",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: struct{ A, B string }{"a", "b"}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"A":"a","B":"b"}}`,
-}, {
-	name:     "CustomErrorWithNestedStruct",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: struct{ A, B struct{ C, D string } }{struct{ C, D string }{"c", "d"}, struct{ C, D string }{"e", "f"}}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"A":{"C":"c","D":"d"},"B":{"C":"e","D":"f"}}}`,
-}, {
-	name:     "CustomErrorWithNestedMap",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: map[string]map[string]string{"a": {"b": "c"}}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"a":{"b":"c"}}}`,
-}, {
-	name:     "CustomErrorWithNestedArray",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: []map[string]string{{"a": "b"}}}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":[{"a":"b"}]}`,
-}, {
-	name:     "CustomWithIntegers",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: 123}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":123}`,
-}, {
-	name:     "CustomWithFloats",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: 123.45}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":123.45}`,
-}, {
-	name:     "CustomWithBooleans",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: true}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":true}`,
-}, {
-	name:     "CustomWithNull",
-	err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: nil}},
-	expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error"}`,
-}}
+}{
+	{
+		name:     "BadRequest",
+		err:      errors.ErrBadRequest,
+		expected: `{"Code":"BAD_REQUEST","Message":"Invalid input"}`,
+	}, {
+		name:     "NotFound",
+		err:      errors.ErrNotFound,
+		expected: `{"Code":"NOT_FOUND","Message":"URL Not Found"}`,
+	}, {
+		name:     "MethodNotAllowed",
+		err:      errors.ErrMethodNotAllowed,
+		expected: `{"Code":"METHOD_NOT_ALLOWED","Message":"Method Not Allowed"}`,
+	}, {
+		name:     "InternalServerError",
+		err:      errors.ErrInternalServerError,
+		expected: `{"Code":"INTERNAL_SERVER_ERROR","Message":"Internal Server Error","Description":"Retry after some time, if persist contact technical team"}`,
+	}, {
+		name:     "CustomError",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: "xyz"}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":"xyz"}`,
+	}, {
+		name:     "CustomErrorWithMap",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: map[string]string{"key": "value"}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"key":"value"}}`,
+	}, {
+		name:     "CustomErrorWithArray",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: []any{"a", 1}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":["a",1]}`,
+	}, {
+		name:     "CustomErrorWithStruct",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: struct{ A, B string }{"a", "b"}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"A":"a","B":"b"}}`,
+	}, {
+		name:     "CustomErrorWithNestedStruct",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: struct{ A, B struct{ C, D string } }{struct{ C, D string }{"c", "d"}, struct{ C, D string }{"e", "f"}}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"A":{"C":"c","D":"d"},"B":{"C":"e","D":"f"}}}`,
+	}, {
+		name:     "CustomErrorWithNestedMap",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: map[string]map[string]string{"a": {"b": "c"}}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":{"a":{"b":"c"}}}`,
+	}, {
+		name:     "CustomErrorWithNestedArray",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: []map[string]string{{"a": "b"}}}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":[{"a":"b"}]}`,
+	}, {
+		name:     "CustomWithIntegers",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: 123}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":123}`,
+	}, {
+		name:     "CustomWithFloats",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: 123.45}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":123.45}`,
+	}, {
+		name:     "CustomWithBooleans",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: true}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error","Description":true}`,
+	}, {
+		name:     "CustomWithNull",
+		err:      &errors.HTTPError{StatusCode: 400, CustomError: &errors.CustomError{Code: "CUSTOM_ERROR", Message: "Custom Error", Description: nil}},
+		expected: `{"Code":"CUSTOM_ERROR","Message":"Custom Error"}`,
+	},
+}
 
 func TestErrorEncoding(t *testing.T) {
 	ctx := context.Background()
