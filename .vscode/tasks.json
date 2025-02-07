@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "DockerUp",
+            "type": "shell",
+            "command": "docker compose -f docker-compose-dependency.yml up  -d",
+        },
+        {
+            "label": "DockerDown",
+            "type": "shell",
+            "command": "docker compose -f docker-compose-dependency.yml down",
+        },
+        {
+            "label": "build",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "${workspaceFolder}/bin/${workspaceFolderBasename}",
+            ],
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/cmd/policy-downloader"
+            },
+            "problemMatcher": [
+                "$go"
+            ],
+        },
+        {
+            "label":"cleanup",
+            "type": "shell",
+            "command": "rm ${workspaceFolder}/bin/${workspaceFolderBasename}",
+        }
+    ]
+}

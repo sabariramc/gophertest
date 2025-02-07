@@ -1,0 +1,5 @@
+*.out
+*.test
+_coverage.xml
+coverage.txt
+.DS_Store
