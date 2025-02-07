@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import (
 	"context"
@@ -8,22 +8,22 @@ import (
 	"time"
 )
 
-func (b *AppBase) StartSignalMonitor(ctx context.Context) {
+func (b *Lifecycle) StartSignalMonitor(ctx context.Context) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGTERM, os.Interrupt)
 	go b.monitorSignals(ctx, c)
 }
 
-func (b *AppBase) monitorSignals(ctx context.Context, ch chan os.Signal) {
+func (b *Lifecycle) monitorSignals(ctx context.Context, ch chan os.Signal) {
 	<-ch
 	b.Shutdown(ctx)
 }
 
-func (b *AppBase) RegisterOnShutdownHook(handler ShutdownHook) {
+func (b *Lifecycle) RegisterOnShutdownHook(handler ShutdownHook) {
 	b.shutdownHooks = append(b.shutdownHooks, handler)
 }
 
-func (b *AppBase) Shutdown(ctx context.Context) {
+func (b *Lifecycle) Shutdown(ctx context.Context) {
 	b.log.Notice(ctx, "Gracefully shutting down server")
 	hooksCount := len(b.shutdownHooks)
 	for i, hook := range b.shutdownHooks {
@@ -35,7 +35,7 @@ func (b *AppBase) Shutdown(ctx context.Context) {
 	b.shutdownWg.Done()
 }
 
-func (b *AppBase) processShutdownHook(ctx context.Context, handler ShutdownHook) {
+func (b *Lifecycle) processShutdownHook(ctx context.Context, handler ShutdownHook) {
 	defer func() {
 		if rec := recover(); rec != nil {
 			b.log.Errorf(ctx, "panic during shutting down: name: %s: %v"+handler.Name(ctx), rec)

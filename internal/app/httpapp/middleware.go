@@ -1,8 +1,8 @@
-package apiapp
+package httpapp
 
 import (
 	"fmt"
-	"gopertest/internal/appbase"
+	"gopertest/internal/app/base"
 	"gopertest/internal/errors"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 	"gitlab.com/engineering/products/api_security/go-common/log/correlation"
 )
 
-var pool = appbase.GetEventIDPool()
+var pool = base.GetEventIDPool()
 
 func (s *HTTPServer) withMiddleware(path string, next http.HandlerFunc) http.Handler {
 	return s.SetCorrelationMiddleware(s.MetricsMiddleware(path, s.PanicHandleMiddleware(next)))
@@ -46,7 +46,7 @@ func (h *HTTPServer) PanicHandleMiddleware(next http.Handler) http.Handler {
 		ctx := r.Context()
 		defer func() {
 			if rec := recover(); rec != nil {
-				stackTrace, err := h.base.PanicRecovery(ctx, rec)
+				stackTrace, err := base.PanicRecovery(ctx, rec)
 				h.log.Errorf(ctx, "Panic Recovery: err: %v, stackTrace: %s", err, stackTrace)
 				h.WriteErrorResponse(ctx, w, errors.ErrInternalServerError)
 			}

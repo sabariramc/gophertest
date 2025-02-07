@@ -1,8 +1,8 @@
-package apiapp
+package httpapp
 
 import (
 	"context"
-	"gopertest/internal/appbase"
+	"gopertest/internal/app/base/lifecycle"
 	"gopertest/internal/service/math"
 	"net/http"
 	"time"
@@ -14,7 +14,7 @@ import (
 
 type HTTPServer struct {
 	serviceName string
-	base        *appbase.AppBase
+	lc          *lifecycle.Lifecycle
 	server      *server.RESTAPIServer
 	router      *httprouter.Router
 	math        *math.Math
@@ -41,7 +41,7 @@ func New(ctx context.Context, options ...Option) (*HTTPServer, error) {
 	router := httprouter.New()
 	h := &HTTPServer{
 		serviceName: config.ServiceName,
-		base:        config.Base,
+		lc:          config.Lifecycle,
 		server:      config.Server,
 		log:         config.Log,
 		port:        config.Port,
@@ -50,7 +50,7 @@ func New(ctx context.Context, options ...Option) (*HTTPServer, error) {
 		math:        config.Math,
 	}
 	h.server.Handler = h
-	h.base.RegisterHooks(h)
+	h.lc.RegisterHooks(h)
 	h.configureRoutes()
 	return h, nil
 }
@@ -64,13 +64,13 @@ func (s *HTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *HTTPServer) Start() {
 	ctx := context.Background()
 	h.log.Noticef(ctx, "Server starting at %v", h.port)
-	h.base.StartSignalMonitor(ctx)
+	h.lc.StartSignalMonitor(ctx)
 	err := h.server.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		h.log.Criticalf(ctx, "Server crashed: err: %s", err)
-		h.base.Shutdown(ctx)
+		h.lc.Shutdown(ctx)
 	}
-	h.base.WaitForCompleteShutDown()
+	h.lc.WaitForCompleteShutDown()
 }
 
 func (s *HTTPServer) Name(ctx context.Context) string {

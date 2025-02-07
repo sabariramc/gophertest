@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"gopertest/internal/apiapp"
+	"gopertest/internal/app/httpapp"
 	counter "gopertest/internal/counter/inmemory"
 	"gopertest/internal/service/math"
 )
@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	srv, err := apiapp.New(ctx, apiapp.WithMath(mathSvc))
+	srv, err := httpapp.New(ctx, httpapp.WithMath(mathSvc))
 	if err != nil {
 		panic(err)
 	}

@@ -1,4 +1,4 @@
-package appbase
+package base
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 )
 
-func (b *AppBase) PanicRecovery(ctx context.Context, rec any) (string, error) {
+func PanicRecovery(ctx context.Context, rec any) (string, error) {
 	stackTrace := string(debug.Stack())
 	err, ok := rec.(error)
 	if !ok {

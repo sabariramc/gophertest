@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"gitlab.com/engineering/products/api_security/go-common/log"
 )
 
-type AppBase struct {
+type Lifecycle struct {
 	log           log.Log
 	shutdownHooks []ShutdownHook
 	healthHooks   []HealthCheckHook
@@ -15,12 +15,12 @@ type AppBase struct {
 	shutdownWg    sync.WaitGroup
 }
 
-func New(ctx context.Context, option ...Option) *AppBase {
+func New(ctx context.Context, option ...Option) *Lifecycle {
 	config := GetDefaultConfig(ctx)
 	for _, opt := range option {
 		opt(config)
 	}
-	b := &AppBase{
+	b := &Lifecycle{
 		shutdownHooks: make([]ShutdownHook, 0, 10),
 		log:           config.Log,
 	}
@@ -28,6 +28,6 @@ func New(ctx context.Context, option ...Option) *AppBase {
 	return b
 }
 
-func (b *AppBase) WaitForCompleteShutDown() {
+func (b *Lifecycle) WaitForCompleteShutDown() {
 	b.shutdownWg.Wait()
 }

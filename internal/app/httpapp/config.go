@@ -1,9 +1,9 @@
-package apiapp
+package httpapp
 
 import (
 	"context"
 	"fmt"
-	"gopertest/internal/appbase"
+	"gopertest/internal/app/base/lifecycle"
 	"gopertest/internal/service/math"
 
 	e "gopertest/internal/env"
@@ -18,7 +18,7 @@ var env = environment.EnvironmentReader{}
 
 type Config struct {
 	ServiceName    string
-	Base           *appbase.AppBase
+	Lifecycle      *lifecycle.Lifecycle
 	Server         *server.RESTAPIServer
 	Log            log.Log
 	Port           uint16
@@ -41,7 +41,7 @@ func GetDefaultConfig(ctx context.Context) (*Config, error) {
 	}
 	return &Config{
 		ServiceName:    env.ReadString(e.EnvServiceName, "default"),
-		Base:           appbase.New(ctx),
+		Lifecycle:      lifecycle.New(ctx),
 		Server:         srv,
 		Log:            log,
 		Port:           uint16(port),
@@ -65,9 +65,9 @@ func WithServiceName(serviceName string) Option {
 	}
 }
 
-func WithBase(base *appbase.AppBase) Option {
+func WithBase(lc *lifecycle.Lifecycle) Option {
 	return func(c *Config) error {
-		c.Base = base
+		c.Lifecycle = lc
 		return nil
 	}
 }

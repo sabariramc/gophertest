@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import (
 	"context"
@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-func (b *AppBase) RegisterStatusCheckHook(handler StatusCheckHook) {
+func (b *Lifecycle) RegisterStatusCheckHook(handler StatusCheckHook) {
 	b.statusHooks = append(b.statusHooks, handler)
 }
 
-func (b *AppBase) RunStatusCheck(ctx context.Context) map[string]any {
+func (b *Lifecycle) RunStatusCheck(ctx context.Context) map[string]any {
 	b.log.Debug(ctx, "Starting status check")
 	n := len(b.statusHooks)
 	res := map[string]any{}
@@ -24,7 +24,7 @@ func (b *AppBase) RunStatusCheck(ctx context.Context) map[string]any {
 	return res
 }
 
-func (b *AppBase) processStatusCheck(ctx context.Context, hook StatusCheckHook) any {
+func (b *Lifecycle) processStatusCheck(ctx context.Context, hook StatusCheckHook) any {
 	var status any
 	var err error
 	func() {

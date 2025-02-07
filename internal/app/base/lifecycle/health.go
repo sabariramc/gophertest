@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"time"
 )
 
-func (b *AppBase) RegisterHealthCheckHook(handler HealthCheckHook) {
+func (b *Lifecycle) RegisterHealthCheckHook(handler HealthCheckHook) {
 	b.healthHooks = append(b.healthHooks, handler)
 }
 
-func (b *AppBase) RunHealthCheck(ctx context.Context) error {
+func (b *Lifecycle) RunHealthCheck(ctx context.Context) error {
 	b.log.Debug(ctx, "Starting health check")
 	n := len(b.healthHooks)
 	description := map[string]string{}
@@ -36,7 +36,7 @@ func (b *AppBase) RunHealthCheck(ctx context.Context) error {
 	return err
 }
 
-func (b *AppBase) processHealthCheck(ctx context.Context, hook HealthCheckHook) error {
+func (b *Lifecycle) processHealthCheck(ctx context.Context, hook HealthCheckHook) error {
 	var err error
 	func() {
 		defer func() {

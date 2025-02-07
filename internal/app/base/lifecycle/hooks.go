@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import "context"
 
@@ -21,7 +21,7 @@ type StatusCheckHook interface {
 	StatusCheck(ctx context.Context) (any, error)
 }
 
-func (b *AppBase) RegisterHooks(hook any) {
+func (b *Lifecycle) RegisterHooks(hook any) {
 	if hHook, ok := hook.(HealthCheckHook); ok {
 		b.RegisterHealthCheckHook(hHook)
 	}

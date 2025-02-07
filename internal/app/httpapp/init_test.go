@@ -1,8 +1,8 @@
-package apiapp_test
+package httpapp_test
 
 import (
 	"context"
-	"gopertest/internal/apiapp"
+	"gopertest/internal/app/httpapp"
 	"gopertest/internal/component"
 	inmCtr "gopertest/internal/counter/inmemory"
 	redCtr "gopertest/internal/counter/redis"
@@ -17,7 +17,7 @@ var cnt int
 var blob []byte
 var statusCode int
 
-var srv *apiapp.HTTPServer
+var srv *httpapp.HTTPServer
 
 func createInMemory() error {
 	ctx := context.Background()
@@ -26,7 +26,7 @@ func createInMemory() error {
 	if err != nil {
 		return err
 	}
-	srv, err = apiapp.New(ctx, apiapp.WithMath(mathSvc))
+	srv, err = httpapp.New(ctx, httpapp.WithMath(mathSvc))
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func createRedis() (func(), error) {
 	if err != nil {
 		return nil, err
 	}
-	srv, err = apiapp.New(ctx, apiapp.WithMath(mathSvc))
+	srv, err = httpapp.New(ctx, httpapp.WithMath(mathSvc))
 	if err != nil {
 		return nil, err
 	}

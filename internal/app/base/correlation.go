@@ -1,4 +1,4 @@
-package appbase
+package base
 
 import (
 	"sync"

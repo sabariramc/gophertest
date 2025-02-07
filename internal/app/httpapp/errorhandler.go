@@ -1,4 +1,4 @@
-package apiapp
+package httpapp
 
 import (
 	"context"

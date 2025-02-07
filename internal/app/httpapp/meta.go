@@ -1,4 +1,4 @@
-package apiapp
+package httpapp
 
 import (
 	"gopertest/internal/errors"
@@ -6,7 +6,7 @@ import (
 )
 
 func (h *HTTPServer) healthCheck(w http.ResponseWriter, r *http.Request) {
-	err := h.base.RunHealthCheck(r.Context())
+	err := h.lc.RunHealthCheck(r.Context())
 	if err != nil {
 		h.WriteErrorResponse(r.Context(), w, err)
 		return
@@ -15,7 +15,7 @@ func (h *HTTPServer) healthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HTTPServer) statusCheck(w http.ResponseWriter, r *http.Request) {
-	h.WriteJSON(r.Context(), w, h.base.RunStatusCheck(r.Context()))
+	h.WriteJSON(r.Context(), w, h.lc.RunStatusCheck(r.Context()))
 }
 
 func (s *HTTPServer) notFound(w http.ResponseWriter, r *http.Request) {

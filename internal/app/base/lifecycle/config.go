@@ -1,4 +1,4 @@
-package appbase
+package lifecycle
 
 import (
 	"context"
