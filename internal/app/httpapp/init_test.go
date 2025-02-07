@@ -14,6 +14,12 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+func TestMain(m *testing.M) {
+	// testInmemory(m)
+	testRedis(m)
+	os.Exit(0)
+}
+
 var cnt int
 var blob []byte
 var statusCode int
@@ -80,10 +86,4 @@ func testRedis(m *testing.M) {
 	if code != 0 {
 		os.Exit(code)
 	}
-}
-
-func TestMain(m *testing.M) {
-	// testInmemory(m)
-	testRedis(m)
-	os.Exit(0)
 }
