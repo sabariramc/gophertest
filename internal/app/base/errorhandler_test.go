@@ -1,8 +1,9 @@
-package httpapp_test
+package base_test
 
 import (
 	"context"
 	"fmt"
+	"gopertest/internal/app/base"
 	"gopertest/internal/errors"
 	"testing"
 
@@ -81,7 +82,7 @@ func TestErrorEncoding(t *testing.T) {
 	for _, tt := range tc {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			statusCode, blob, err = srv.ProcessError(ctx, tt.err)
+			statusCode, blob, err = base.ProcessError(ctx, tt.err)
 			assert.NilError(t, err)
 			assert.Equal(t, tt.expected, string(blob))
 		})
@@ -106,7 +107,7 @@ func BenchmarkErrorEncoding(b *testing.B) {
 	b.ResetTimer()
 	nextErr := getIter()
 	for i := 0; i < b.N; i++ {
-		statusCode, blob, _ = srv.ProcessError(ctx, nextErr())
+		statusCode, blob, _ = base.ProcessError(ctx, nextErr())
 	}
 }
 
@@ -119,7 +120,7 @@ func BenchmarkErrorEncodingParallel(b *testing.B) {
 			b.RunParallel(func(pb *testing.PB) {
 				nextErr := getIter()
 				for pb.Next() {
-					statusCode, blob, _ = srv.ProcessError(ctx, nextErr())
+					statusCode, blob, _ = base.ProcessError(ctx, nextErr())
 					cnt++
 				}
 			})
@@ -127,3 +128,7 @@ func BenchmarkErrorEncodingParallel(b *testing.B) {
 	}
 	fmt.Println(cnt)
 }
+
+var cnt int
+var blob []byte
+var statusCode int

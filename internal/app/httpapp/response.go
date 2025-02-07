@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"gopertest/internal/app/base"
 	"net/http"
 )
 
@@ -39,7 +40,7 @@ func (h *HTTPServer) WriteResponse(ctx context.Context, w http.ResponseWriter, c
 
 func (h *HTTPServer) WriteErrorResponse(ctx context.Context, w http.ResponseWriter, err error) {
 	h.log.Errorf(ctx, "error handling request : %v", err)
-	statusCode, body, parseErr := h.ProcessError(ctx, err)
+	statusCode, body, parseErr := base.ProcessError(ctx, err)
 	if parseErr != nil {
 		h.log.Criticalf(ctx, "error marshalling response: %v", parseErr)
 	}
