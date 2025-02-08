@@ -19,6 +19,7 @@ func New(ctx context.Context) *counter {
 func (c *counter) Get(ctx context.Context) (int64, error) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
+	res := c.counter
 	c.counter++
-	return c.counter, nil
+	return res, nil
 }

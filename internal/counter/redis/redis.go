@@ -24,18 +24,7 @@ func New(ctx context.Context, options ...Option) (*counter, error) {
 		client: cfg.RedisClient,
 		key:    cfg.Key,
 	}
-	if err := c.init(ctx); err != nil {
-		return nil, err
-	}
 	return c, nil
-}
-
-func (c *counter) init(ctx context.Context) error {
-	_, err := c.client.Get(ctx, c.key).Int64()
-	if err == redis.Nil {
-		_, err = c.client.Set(ctx, c.key, 0, 0).Result()
-	}
-	return err
 }
 
 func (c *counter) Get(ctx context.Context) (int64, error) {
