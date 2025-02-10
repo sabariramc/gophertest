@@ -22,11 +22,11 @@ WORKDIR /service
 
 
 FROM builder AS apiserverbuilder
-WORKDIR /myapp/apiserver
+WORKDIR /myapp/cmd/apiserver
 RUN go build -tags musl -o /app
 
 FROM builder AS apiserver2builder
-WORKDIR /myapp/apiserver2
+WORKDIR /myapp/cmd/apiserver2
 RUN go build -tags musl -o /app
 
 FROM runner AS apiserver
