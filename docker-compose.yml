@@ -1,0 +1,13 @@
+services:
+  redis:
+    image: redis:7.0-rc-alpine
+    ports:
+      - 60013:6379
+  apiserver:
+    build:
+      context: .
+      target: apiserver
+      args:
+        - PRIVATE_KEY
+      extra_hosts:
+        - "gitlab:10.100.40.72"
