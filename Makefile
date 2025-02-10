@@ -8,7 +8,7 @@ test:
 	@echo ">>-> Running go test for the libraries"; \
         echo "Running UT for library: '$(lib)'"; \
         go1.23.5 test -v ./... -coverprofile=coverage.txt -covermode count --cover -coverpkg=./... -p 1 && \
-		gocover-cobertura -ignore-dirs '/mocks$$' -ignore-files '(main.go$$|^cmd/policy-downloader/bootstrap/metrics.go$$|^cmd/policy-downloader/bootstrap/server.go$$|config.go$$|^comptest/test_dependency_manager.go$$|store_redis_client.go$$|stream_redis_client.go$$|redis_client.go$$|vault_client.go$$)' < coverage.txt > ${WORKSPACE}/$(lib)_coverage.xml || { \
+		gocover-cobertura -ignore-dirs '/mocks$$' -ignore-files '(main.go$$|config.go$$|^internal/testdependencies/manager.go$$)' < coverage.txt > ${WORKSPACE}/$(lib)_coverage.xml || { \
 		echo "test failed for $${entry}."; \
 		exit 1; \
         }; \
