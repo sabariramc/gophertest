@@ -11,8 +11,9 @@ import (
 var env = environment.EnvironmentReader{}
 
 type Config struct {
-	RedisClient *redis.Client
-	Key         string
+	RedisClient    *redis.Client
+	Key            string
+	MetricsEnabled bool
 }
 
 func GetDefaultConfig() *Config {
@@ -36,8 +37,15 @@ func WithRedisClient(client *redis.Client) Option {
 		c.RedisClient = client
 	}
 }
+
 func WithKey(key string) Option {
 	return func(c *Config) {
 		c.Key = key
+	}
+}
+
+func WithMetricsEnabled() Option {
+	return func(c *Config) {
+		c.MetricsEnabled = true
 	}
 }

@@ -2,6 +2,7 @@ package metrics
 
 const (
 	MetricAPIServerLatency = "api_server_latency" //Histogram
+	MetricRedisLatency     = "redis_latency"      //Histogram
 )
 
 type MetricRecorder interface {
