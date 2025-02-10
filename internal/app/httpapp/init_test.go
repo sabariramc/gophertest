@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"gopertest/internal/app/httpapp"
-	"gopertest/internal/component"
 	inmCtr "gopertest/internal/counter/inmemory"
 	redCtr "gopertest/internal/counter/redis"
 	"gopertest/internal/service/math"
+	"gopertest/internal/testdependencies"
 	"os"
 	"testing"
 
@@ -60,7 +60,7 @@ func createInMemory() error {
 }
 
 func createRedis() (func(), error) {
-	comp := component.NewTestDependencyManager(true)
+	comp := testdependencies.NewTestDependencyManager(true)
 	comp.Setup()
 	ctx := context.Background()
 	counter, err := redCtr.New(ctx, redCtr.WithRedisClient(redis.NewClient(&redis.Options{
