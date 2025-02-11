@@ -3,7 +3,6 @@ package httpapp
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"gopertest/internal/app/base"
 	"gopertest/internal/errors"
 	"net/http"
@@ -17,7 +16,7 @@ func (h *HTTPServer) WriteJSONWithStatusCode(ctx context.Context, w http.Respons
 	if !ok {
 		blob, err = json.Marshal(responseBody)
 		if err != nil {
-			h.log.Criticalf(ctx, "Error in response json marshall", fmt.Errorf("HttpServer.WriteJsonWithStatusCode: error marshalling response: %w", err), responseBody)
+			h.log.Criticalf(ctx, "WriteJSONWithStatusCode: error in response json marshall: %v", err)
 			h.WriteErrorResponse(ctx, w, errors.ErrInternalServerError)
 			return
 		}
@@ -42,10 +41,10 @@ func (h *HTTPServer) WriteResponse(ctx context.Context, w http.ResponseWriter, c
 }
 
 func (h *HTTPServer) WriteErrorResponse(ctx context.Context, w http.ResponseWriter, err error) {
-	h.log.Errorf(ctx, "error handling request : %v", err)
+	h.log.Errorf(ctx, "WriteErrorResponse: error handling request : %v", err)
 	statusCode, body, parseErr := base.ProcessError(ctx, err)
 	if parseErr != nil {
-		h.log.Criticalf(ctx, "error marshalling response: %v", parseErr)
+		h.log.Criticalf(ctx, "WriteErrorResponse: error marshalling response: %v", parseErr)
 	}
 	h.WriteJSONWithStatusCode(ctx, w, statusCode, body)
 }
