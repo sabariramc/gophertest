@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gopertest/internal/app/base"
+	"gopertest/internal/errors"
 	"net/http"
 )
 
@@ -17,6 +18,8 @@ func (h *HTTPServer) WriteJSONWithStatusCode(ctx context.Context, w http.Respons
 		blob, err = json.Marshal(responseBody)
 		if err != nil {
 			h.log.Criticalf(ctx, "Error in response json marshall", fmt.Errorf("HttpServer.WriteJsonWithStatusCode: error marshalling response: %w", err), responseBody)
+			h.WriteErrorResponse(ctx, w, errors.ErrInternalServerError)
+			return
 		}
 	}
 	w.Header().Set(HttpHeaderContentType, "application/json")
